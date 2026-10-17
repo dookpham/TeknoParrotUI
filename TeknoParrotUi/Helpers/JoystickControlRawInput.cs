@@ -334,7 +334,7 @@ namespace TeknoParrotUi.Helpers
                         
                         // Unfocus textbox
                         Keyboard.ClearFocus();
-                        FocusManager.SetFocusedElement(Application.Current.Windows[0], null);
+                        FocusManager.SetFocusedElement(FocusManager.GetFocusScope(txt), null);
                         _lastActiveTextBox = null;
                     }
                     else
@@ -350,7 +350,7 @@ namespace TeknoParrotUi.Helpers
         /// <returns></returns>
         private TextBox GetActiveTextBox()
         {
-            IInputElement focusedControl = FocusManager.GetFocusedElement(Application.Current.Windows[0]);
+            IInputElement focusedControl = Keyboard.FocusedElement;
 
             if (focusedControl == null)
                 return null;

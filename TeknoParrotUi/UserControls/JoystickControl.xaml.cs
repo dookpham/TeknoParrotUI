@@ -200,20 +200,19 @@ namespace TeknoParrotUi.UserControls
 
         private void KeepCursorInTextBox(TextBox box)
         {
-            var mainWindow = Application.Current.MainWindow;
-            var source = PresentationSource.FromVisual(mainWindow);
-
-            if (source?.CompositionTarget == null)
+            if (PresentationSource.FromVisual(box)?.CompositionTarget == null)
                 return;
 
-            var dpiScale = source.CompositionTarget.TransformToDevice;
-            Point relativePoint = box.TransformToAncestor(mainWindow).Transform(new Point(0, 0));
+            // Use this control's screen coordinates, including window chrome and DPI,
+            // rather than assuming Application.MainWindow is its visual ancestor.
+            Point topLeft = box.PointToScreen(new Point(1, 1));
+            Point bottomRight = box.PointToScreen(new Point(box.ActualWidth, box.ActualHeight));
 
             RECT clipRect = new RECT();
-            clipRect.Left = (int)((mainWindow.Left + relativePoint.X + 1) * dpiScale.M11);
-            clipRect.Top = (int)((mainWindow.Top + relativePoint.Y + 1) * dpiScale.M22);
-            clipRect.Right = (int)((mainWindow.Left + relativePoint.X + box.ActualWidth) * dpiScale.M11);
-            clipRect.Bottom = (int)((mainWindow.Top + relativePoint.Y + box.ActualHeight) * dpiScale.M22);
+            clipRect.Left = (int)topLeft.X;
+            clipRect.Top = (int)topLeft.Y;
+            clipRect.Right = (int)bottomRight.X;
+            clipRect.Bottom = (int)bottomRight.Y;
 
             ClipCursor(ref clipRect);
         }

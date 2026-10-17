@@ -580,6 +580,9 @@ namespace TeknoParrotUi
         private void StartApp()
         {
             MainWindow wnd = new MainWindow();
+            // First-run policy dialogs can become WPF's automatic MainWindow.
+            // Input hooks and control setup must target the visible application window.
+            Current.MainWindow = wnd;
             wnd.Show();
         }
     }
